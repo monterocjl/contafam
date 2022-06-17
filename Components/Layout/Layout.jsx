@@ -3,12 +3,13 @@ import { Box, Avatar } from "@chakra-ui/react";
 import Link from "next/link";
 
 export default function Layout({ children }) {
-  const [imagen, setImagen] = useState();
+  const [imagen, setImagen] = useState("default");
 
-  console.log(imagen);
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setImagen(localStorage.getItem("Avatar"));
+      if (localStorage.getItem("Usuario")) {
+        setImagen(localStorage.getItem("Avatar"));
+      }
     }
   }, []);
 
@@ -20,6 +21,7 @@ export default function Layout({ children }) {
             <Avatar
               borderRadius='100px'
               name='Juan'
+              border='3px solid #4A5568'
               src={`/img/${imagen}.jpg`}
             />
           </Box>
@@ -28,12 +30,10 @@ export default function Layout({ children }) {
             alignItems='center'
             justifyContent='space-between'
             gap={5}
+            fontWeight='bold'
           >
-            <Link href='/'>
-              <a>Inicio</a>
-            </Link>
             <Link href='/product'>
-              <a>Producto</a>
+              <a>Cambiar tabla</a>
             </Link>
           </Box>
         </Box>

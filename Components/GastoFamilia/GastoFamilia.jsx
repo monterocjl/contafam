@@ -1,119 +1,114 @@
-import {
-  Box,
-  Button,
-  Select,
-  Input,
-  Textarea,
-  FormControl,
-  FormErrorMessage,
-} from "@chakra-ui/react";
+import { useState, useEffect, useRef } from "react";
+import { Box, Button, useToast } from "@chakra-ui/react";
+import AddImagePrev from "../AddImagePrev/AddImagePrev";
+import saveNewImage from "../../api/saveNewImage";
+import { successToast, errorToast } from "../../utils/toasts";
+import addToDataBase from "../../api/addToDataBase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Description from "../Description/Description";
+import Importe from "../Importe/Importe";
+import Categoria from "../Categoria/Categoria";
 
 export default function GastoFamilia({ tipoOperacion }) {
+  const toast = useToast();
+  const adjunto = useRef(null);
+  const categoria = useRef(null);
+  const importe = useRef(null);
+  const descripcion = useRef(null);
+  const [file, setFile] = useState(null);
+  const [previewImg, setPreviewImg] = useState("/img/default.jpg");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (file?.name) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        setPreviewImg(reader.result);
+      };
+    }
+  }, [previewImg, file]);
+
+  function deletePreviewImg() {
+    setFile(null);
+    adjunto.current.value = "";
+  }
+
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
 
-    onSubmit: async (formData) => {
+    onSubmit: async (formData, { resetForm }) => {
+      setLoading(true);
+
+      const data = file ? await saveNewImage(file) : "";
+
+      const usuario = localStorage.getItem("Usuario");
+
       const completeData = {
         ...formData,
         operacion: tipoOperacion,
-        usuario: "Juan Luis",
+        usuario: usuario,
+        adjunto: data?.secure_url ? data?.secure_url : "",
       };
 
-      const JSONdata = JSON.stringify(completeData);
-      const endpoint = "/api/fam";
+      const response = await addToDataBase(completeData, "fam");
 
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSONdata,
-      };
+      if (response.status == 200) {
+        toast(successToast(usuario));
+        resetForm();
+        categoria.current.value = "";
+        importe.current.value = "";
+        descripcion.current.value = "";
+        adjunto.current.value = "";
+        setFile(null);
 
-      await fetch(endpoint, options);
+        setLoading(false);
+      } else {
+        toast(errorToast);
+        setLoading(false);
+      }
     },
   });
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
-        <Box display='flex' flexDirection='column' gap={4}>
-          <FormControl
-            isInvalid={formik.errors.categoria}
-            isRequired={formik.errors.categoria}
-          >
-            <Select
-              id='categoria'
-              name='categoria'
-              type='select'
-              onChange={formik.handleChange}
-              placeholder='Tipo de gasto'
-            >
-              <option value='Bodega'>Bodega</option>
-              <option value='Farmacia'>Farmacia</option>
-              <option value='Carro'>Carro</option>
-              <option value='Salud'>Salud</option>
-              <option value='Gas'>Gas</option>
-              <option value='Internet'>Internet</option>
-              <option value='Celular'>Celular</option>
-              <option value='Mantenimiento'>Mantenimiento</option>
-              <option value='Luz'>Luz</option>
-              <option value='Cochera'>Cochera</option>
-              <option value='Otros'>Otros</option>
-            </Select>
-            <FormErrorMessage color='white' fontStyle='italic' mt='3px'>
-              {formik.errors.categoria}
-            </FormErrorMessage>
-          </FormControl>
+        <Box display='flex' flexDirection='column' gap={6} fontSize='xl'>
+          <Categoria
+            error={formik.errors.categoria}
+            reference={categoria}
+            onChange={formik.handleChange}
+            options={categoriasGastoFamilia}
+          />
 
-          <Box
-            display='flex'
-            alignItems='center'
-            justifyContent='space-between'
-          >
-            <Box>Importe S/.</Box>
-            <Box w='40%'>
-              <FormControl
-                isInvalid={formik.errors.importe}
-                isRequired={formik.errors.importe}
-              >
-                <Input
-                  id='importe'
-                  name='importe'
-                  type='number'
-                  placeholder='0'
-                  onChange={formik.handleChange}
-                />
-                <FormErrorMessage color='white' fontStyle='italic' mt='3px'>
-                  {formik.errors.importe}
-                </FormErrorMessage>
-              </FormControl>
-            </Box>
-          </Box>
-          <Box>
-            <Box mb={1}>Descripción</Box>
-            <FormControl
-              isInvalid={formik.errors.descripcion}
-              isRequired={formik.errors.descripcion}
-            >
-              <Textarea
-                id='descripcion'
-                name='descripcion'
-                type='text'
-                onChange={formik.handleChange}
-                placeholder='Ingresa una descripción'
-                size='sm'
-                resize='false'
-              />
+          <Importe
+            error={formik.errors.importe}
+            reference={importe}
+            onChange={formik.handleChange}
+          />
+          <Description
+            error={formik.errors.descripcion}
+            reference={descripcion}
+            onChange={formik.handleChange}
+          />
+          <AddImagePrev
+            adjunto={adjunto}
+            setFile={setFile}
+            file={file}
+            deletePreviewImg={deletePreviewImg}
+            previewImg={previewImg}
+          />
 
-              <FormErrorMessage color='white' fontStyle='italic' mt='3px'>
-                {formik.errors.descripcion}
-              </FormErrorMessage>
-            </FormControl>
-          </Box>
-          <Button type='submit' colorScheme='red'>
+          <Button
+            type='submit'
+            colorScheme='red'
+            fontSize='xl'
+            isLoading={loading}
+            loadingText='Agregando'
+            spinnerPlacement='start'
+            py={4}
+          >
             Agregar gasto
           </Button>
         </Box>
@@ -127,13 +122,29 @@ function initialValues() {
     importe: 0,
     categoria: "",
     descripcion: "",
+    adjunto: "",
   };
 }
 
 function validationSchema() {
   return {
-    importe: Yup.string().required("The email is required."),
-    categoria: Yup.string().required("The email is required."),
-    descripcion: Yup.string().required("The email is required."),
+    importe: Yup.string().required("Debes ingresar un importe"),
+    categoria: Yup.string().required("Debes elegir un tipo de gasto"),
+    descripcion: Yup.string(),
+    adjunto: Yup.string(),
   };
 }
+
+const categoriasGastoFamilia = [
+  "Bodega",
+  "Farmacia",
+  "Carro",
+  "Salud",
+  "Gas",
+  "Internet",
+  "Celular",
+  "Mantenimiento",
+  "Luz",
+  "Cochera",
+  "Otros",
+];

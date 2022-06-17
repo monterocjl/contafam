@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, Button, useToast } from "@chakra-ui/react";
-import saveNewImage from "../../api/saveNewImage";
 import AddImagePrev from "../AddImagePrev/AddImagePrev";
-import Categoria from "../Categoria/Categoria";
-import Description from "../Description/Description";
-import Importe from "../Importe/Importe";
+import saveNewImage from "../../api/saveNewImage";
 import { successToast, errorToast } from "../../utils/toasts";
 import addToDataBase from "../../api/addToDataBase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Description from "../Description/Description";
+import Importe from "../Importe/Importe";
+import Categoria from "../Categoria/Categoria";
 
-export default function IngresoFamilia({ tipoOperacion }) {
+export default function GastoChifles({ tipoOperacion }) {
   const toast = useToast();
   const adjunto = useRef(null);
   const categoria = useRef(null);
@@ -53,7 +53,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
         adjunto: data?.secure_url ? data?.secure_url : "",
       };
 
-      const response = await addToDataBase(completeData, "fam");
+      const response = await addToDataBase(completeData, "chifle");
 
       if (response.status == 200) {
         toast(successToast(usuario));
@@ -79,7 +79,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
             error={formik.errors.categoria}
             reference={categoria}
             onChange={formik.handleChange}
-            options={categoriasIngresoFamilia}
+            options={categoriasGastoChifles}
           />
 
           <Importe
@@ -92,7 +92,6 @@ export default function IngresoFamilia({ tipoOperacion }) {
             reference={descripcion}
             onChange={formik.handleChange}
           />
-
           <AddImagePrev
             adjunto={adjunto}
             setFile={setFile}
@@ -103,14 +102,14 @@ export default function IngresoFamilia({ tipoOperacion }) {
 
           <Button
             type='submit'
-            colorScheme='green'
+            colorScheme='red'
             fontSize='xl'
             isLoading={loading}
             loadingText='Agregando'
             spinnerPlacement='start'
             py={4}
           >
-            Agregar ingreso
+            Agregar gasto
           </Button>
         </Box>
       </form>
@@ -123,15 +122,22 @@ function initialValues() {
     importe: 0,
     categoria: "",
     descripcion: "",
+    adjunto: "",
   };
 }
 
 function validationSchema() {
   return {
-    importe: Yup.string().required("The email is required."),
-    categoria: Yup.string().required("The email is required."),
+    importe: Yup.string().required("Debes ingresar un importe"),
+    categoria: Yup.string().required("Debes elegir un tipo de gasto"),
     descripcion: Yup.string(),
+    adjunto: Yup.string(),
   };
 }
 
-const categoriasIngresoFamilia = ["Efectivo", "Depósito"];
+const categoriasGastoChifles = [
+  "Recojo de chifles",
+  "Compra a Keylita",
+  "Materiales",
+  "Otros",
+];

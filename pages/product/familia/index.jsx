@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Select, Input, Textarea } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import Layout from "../../../Components/Layout/Layout";
 import IngresoFamilia from "../../../Components/IngresoFamilia/IngresoFamilia";
 import GastoFamilia from "../../../Components/GastoFamilia/GastoFamilia";
@@ -14,7 +14,10 @@ export default function Familia() {
   return (
     <>
       <Layout>
-        <Box p={10}>
+        <Box px={10} pt={5}>
+          <Box textAlign='center' fontSize='3xl' mb={7} fontWeight='bold'>
+            Familia
+          </Box>
           <Box display='flex' gap={5} justifyContent='center'>
             <Button onClick={() => toggleTipo("Ingreso")} colorScheme='green'>
               Ingreso

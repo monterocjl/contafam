@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     const new_lead = {
       parent: {
-        database_id: process.env.NOTION_LEADS_DATABASE_ID,
+        database_id: process.env.NOTION_CHIFLES_DATABASE_ID,
       },
       properties: {
         Usuario: {

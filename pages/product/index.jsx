@@ -7,22 +7,23 @@ export default function Product() {
     <>
       <Layout>
         <Box
-          h='calc(100vh - 100px)'
+          h='calc(100vh - 120px)'
           display='flex'
           justifyContent='center'
           alignItems='center'
-          gap='50px'
+          flexDirection='column'
+          gap='30px'
         >
           <Link href='/product/familia'>
             <a>
-              <Button colorScheme='blue' px={8}>
+              <Button fontSize='2xl' colorScheme='teal' px={9} py={6}>
                 Familia
               </Button>
             </a>
           </Link>
           <Link href='/product/chifles'>
             <a>
-              <Button px={8} colorScheme='yellow'>
+              <Button fontSize='2xl' colorScheme='yellow' px={9} py={6}>
                 Chifles
               </Button>
             </a>

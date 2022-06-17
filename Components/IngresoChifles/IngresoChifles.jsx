@@ -10,7 +10,7 @@ import addToDataBase from "../../api/addToDataBase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-export default function IngresoFamilia({ tipoOperacion }) {
+export default function IngresoChifles({ tipoOperacion }) {
   const toast = useToast();
   const adjunto = useRef(null);
   const categoria = useRef(null);
@@ -53,7 +53,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
         adjunto: data?.secure_url ? data?.secure_url : "",
       };
 
-      const response = await addToDataBase(completeData, "fam");
+      const response = await addToDataBase(completeData, "chifle");
 
       if (response.status == 200) {
         toast(successToast(usuario));
@@ -79,7 +79,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
             error={formik.errors.categoria}
             reference={categoria}
             onChange={formik.handleChange}
-            options={categoriasIngresoFamilia}
+            options={categoriasIngresoChifles}
           />
 
           <Importe
@@ -134,4 +134,11 @@ function validationSchema() {
   };
 }
 
-const categoriasIngresoFamilia = ["Efectivo", "Depósito"];
+const categoriasIngresoChifles = [
+  "Trabajo Lucha",
+  "SENASA",
+  "Iris",
+  "Condominio",
+  "Familiares",
+  "Otros",
+];
