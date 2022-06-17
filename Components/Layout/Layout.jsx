@@ -21,7 +21,7 @@ export default function Layout({ children }) {
             <Avatar
               borderRadius='100px'
               name='Juan'
-              border='3px solid #4A5568'
+              border='3px solid #2B6CB0'
               src={`/img/${imagen}.jpg`}
             />
           </Box>
