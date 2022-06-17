@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { Box, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  ChevronDownIcon,
+  Button,
+} from "@chakra-ui/react";
 import Link from "next/link";
 
 export default function Layout({ children }) {
@@ -32,9 +41,57 @@ export default function Layout({ children }) {
             gap={5}
             fontWeight='bold'
           >
-            <Link href='/product'>
-              <a>Cambiar tabla</a>
-            </Link>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant='outline'
+                colorScheme='blue'
+                _focus='none'
+                _hover='none'
+                _expanded='none'
+              >
+                Ir a tabla
+              </MenuButton>
+              <MenuList bg='gray.900' borderColor='gray.700'>
+                <MenuItem _focus={{ bg: "gray.700" }}>
+                  <Link href='/dashboard-familia'>
+                    <a>Tabla Familia</a>
+                  </Link>
+                </MenuItem>
+                <MenuItem _focus={{ bg: "gray.700" }}>
+                  <Link href='/dashboard-chifles'>
+                    <a>Tabla Chifles</a>
+                  </Link>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            <Menu>
+              <MenuButton
+                as={Button}
+                colorScheme='blue'
+                _focus='none'
+                _hover='none'
+                _expanded='none'
+              >
+                Producto
+              </MenuButton>
+              <MenuList bg='gray.900' borderColor='gray.700'>
+                <MenuItem _focus={{ bg: "gray.700" }}>
+                  <Link href='/product/familia' w='100%'>
+                    <Box w='100%'>
+                      <a>Familia</a>
+                    </Box>
+                  </Link>
+                </MenuItem>
+                <MenuItem _focus={{ bg: "gray.700" }}>
+                  <Link href='/product/chifles' w='100%'>
+                    <Box w='100%'>
+                      <a>Chifles</a>
+                    </Box>
+                  </Link>
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </Box>
         </Box>
       </Box>
