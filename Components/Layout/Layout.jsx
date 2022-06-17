@@ -54,13 +54,17 @@ export default function Layout({ children }) {
               </MenuButton>
               <MenuList bg='gray.900' borderColor='gray.700'>
                 <MenuItem _focus={{ bg: "gray.700" }}>
-                  <Link href='/dashboard-familia'>
-                    <a>Tabla Familia</a>
+                  <Link href='/dashboard-familia' w='100%'>
+                    <Box w='100%'>
+                      <a>Tabla Familia</a>
+                    </Box>
                   </Link>
                 </MenuItem>
                 <MenuItem _focus={{ bg: "gray.700" }}>
-                  <Link href='/dashboard-chifles'>
-                    <a>Tabla Chifles</a>
+                  <Link href='/dashboard-chifles' w='100%'>
+                    <Box w='100%'>
+                      <a>Tabla Chifles</a>
+                    </Box>
                   </Link>
                 </MenuItem>
               </MenuList>
