@@ -17,6 +17,7 @@ export default function Importe({ error, reference, onChange }) {
               id='importe'
               name='importe'
               type='number'
+              step='any'
               placeholder='0'
               fontWeight='bold'
               onChange={onChange}

@@ -126,7 +126,7 @@ export default function Index({ data }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
   const databaseId = process.env.NOTION_LEADS_DATABASE_ID;

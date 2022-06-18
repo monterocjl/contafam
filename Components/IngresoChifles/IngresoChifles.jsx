@@ -128,7 +128,7 @@ function initialValues() {
 
 function validationSchema() {
   return {
-    importe: Yup.string().required("The email is required."),
+    importe: Yup.number().required("The email is required."),
     categoria: Yup.string().required("The email is required."),
     descripcion: Yup.string(),
   };
