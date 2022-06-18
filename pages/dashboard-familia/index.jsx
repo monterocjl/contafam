@@ -18,27 +18,55 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Spinner,
+  Tooltip,
+  Button,
 } from "@chakra-ui/react";
 import { BsImage } from "react-icons/bs";
-
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
 export default function Index({ data }) {
   const [image, setImage] = useState("/img/default.jpg");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loadingImage, setLoadingImage] = useState(false);
+  const [fechaFiltroInicial, setFechaFiltroInicial] = useState(
+    "Jun 18 1999 GMT-0500"
+  );
+  const [fechaFiltroFinal, setFechaFiltroFinal] = useState(
+    "Jun 18 2022 23:59:59 GMT-0500"
+  );
+  const [dataFiltrada, setDataFiltrada] = useState("");
 
   function showImage(imgUrl) {
     setImage(imgUrl);
     onOpen();
+    setLoadingImage(true);
+
+    setTimeout(() => {
+      setLoadingImage(false);
+    }, 500);
+  }
+
+  function filtrarPorMes(month, year) {
+    setFechaFiltroInicial(`${month} 01 ${year} 00:00:00 GMT-0500`);
+    setFechaFiltroFinal(`${month + 1} 01 ${year} 00:00:00 GMT-0500`);
   }
 
   return (
     <>
       <Layout>
-        <Box pt={6} textAlign='center' fontSize='2xl' fontWeight='bold'>
+        <Totales data={dataFiltrada === "" ? data : dataFiltrada} />
+        <Box pt={7} textAlign='center' fontSize='2xl' fontWeight='bold'>
           Tabla Familia
         </Box>
-        <Box m={6} p={2} border='1px solid #4A5568' borderRadius='8px'>
+        <Box
+          mt={6}
+          p={2}
+          border='1px solid #4A5568'
+          borderRadius='8px'
+          maxW='1250px'
+          mx={{ base: 6, md: "auto" }}
+        >
           <TableContainer>
             <Table size='md' variant='simple'>
               <Thead>
@@ -53,49 +81,80 @@ export default function Index({ data }) {
                 </Tr>
               </Thead>
               <Tbody color='#CBD5E0'>
-                {data.map((operacion) => (
-                  <Tr key={operacion.id}>
-                    <Td>{operacion.properties.Usuario.title[0].plain_text}</Td>
-                    <Td isNumeric fontWeight='bold'>
-                      S/. {operacion.properties.Importe.number}
-                    </Td>
-                    <Td textAlign='center'>
-                      {operacion.properties.Operacion.select.name}
-                    </Td>
-                    <Td textAlign='center'>
-                      {operacion.properties.Categoria.select.name}
-                    </Td>
+                {/* {data.map((operacion) =>
+                  1 < 2 ? <Tr key={operacion.id}></Tr> : ""
+                )} */}
+                {data.map((operacion) =>
+                  new Date(operacion.properties.Creacion.created_time) >=
+                    new Date(fechaFiltroInicial) &&
+                  new Date(operacion.properties.Creacion.created_time) <=
+                    new Date(fechaFiltroFinal) ? (
+                    <Tr key={operacion.id}>
+                      <Td>
+                        {operacion.properties.Usuario.title[0].plain_text}
+                      </Td>
+                      <Td isNumeric fontWeight='bold'>
+                        S/. {operacion.properties.Importe.number}
+                      </Td>
+                      <Td textAlign='center'>
+                        {operacion.properties.Operacion.select.name}
+                      </Td>
+                      <Td textAlign='center'>
+                        {operacion.properties.Categoria.select.name}
+                      </Td>
 
-                    <Td textAlign='center'>
-                      {operacion.properties.Adjunto.rich_text[0]?.plain_text ? (
-                        <IconButton
-                          onClick={() =>
-                            showImage(
-                              operacion.properties.Adjunto.rich_text[0]
-                                ?.plain_text
-                            )
+                      <Td textAlign='center'>
+                        {operacion.properties.Adjunto.rich_text[0]
+                          ?.plain_text ? (
+                          <IconButton
+                            onClick={() =>
+                              showImage(
+                                operacion.properties.Adjunto.rich_text[0]
+                                  ?.plain_text
+                              )
+                            }
+                            variant='outline'
+                            colorScheme='teal'
+                            aria-label='Call Sage'
+                            fontSize='20px'
+                            icon={<BsImage />}
+                          />
+                        ) : (
+                          "-"
+                        )}
+                      </Td>
+                      <Td
+                        maxW='150px'
+                        whiteSpace='nowrap'
+                        textOverflow='ellipsis'
+                        overflow='hidden'
+                      >
+                        <Tooltip
+                          borderRadius='8px'
+                          py={2}
+                          px={3}
+                          label={
+                            operacion.properties.Descripcion.rich_text[0]
+                              .plain_text
                           }
-                          variant='outline'
-                          colorScheme='teal'
-                          aria-label='Call Sage'
-                          fontSize='20px'
-                          icon={<BsImage />}
-                        />
-                      ) : (
-                        "-"
-                      )}
-                    </Td>
-                    <Td
-                      maxW='150px'
-                      whiteSpace='nowrap'
-                      textOverflow='ellipsis'
-                      overflow='hidden'
-                    >
-                      {operacion.properties.Descripcion.rich_text[0].plain_text}
-                    </Td>
-                    <Td>{operacion.properties.Creacion.created_time}</Td>
-                  </Tr>
-                ))}
+                          placement='bottom-start'
+                        >
+                          {
+                            operacion.properties.Descripcion.rich_text[0]
+                              .plain_text
+                          }
+                        </Tooltip>
+                      </Td>
+                      <Td>
+                        {`${new Date(
+                          operacion.properties.Creacion.created_time
+                        )}`.slice(4, 10)}
+                      </Td>
+                    </Tr>
+                  ) : (
+                    ""
+                  )
+                )}
               </Tbody>
               <Tfoot>
                 <Tr>
@@ -110,14 +169,31 @@ export default function Index({ data }) {
               </Tfoot>
             </Table>
           </TableContainer>
+          {/* <Button onClick={() => filtrarPorMes(6, "2022")} colorScheme='green'>
+            Junio
+          </Button> */}
         </Box>
-        <Totales data={data} />
+
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
-          <ModalContent bg='#171923' w='90%'>
+          <ModalContent bg='#171923' w='90%' maxH='85vh' overflow='auto'>
             <ModalCloseButton />
-            <ModalBody mt={8} mb={4} mx={2}>
-              <Image w='auto' h='100%' src={image} alt='' borderRadius='8px' />
+            <ModalBody
+              mt={8}
+              mb={4}
+              mx={1}
+              display='flex'
+              justifyContent='center'
+            >
+              {loadingImage ? <Spinner size='lg' /> : ""}
+              <Image
+                display={!loadingImage ? "block" : "none"}
+                w='100%'
+                h='auto'
+                src={image}
+                alt=''
+                borderRadius='8px'
+              />
             </ModalBody>
           </ModalContent>
         </Modal>

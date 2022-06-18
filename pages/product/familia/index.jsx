@@ -14,7 +14,7 @@ export default function Familia() {
   return (
     <>
       <Layout>
-        <Box px={10} pt={5}>
+        <Box px={10} pt={5} maxW='450px' mx='auto'>
           <Box textAlign='center' fontSize='3xl' mb={7} fontWeight='bold'>
             Familia
           </Box>

@@ -18,28 +18,43 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Spinner,
+  Tooltip,
 } from "@chakra-ui/react";
 import { BsImage } from "react-icons/bs";
-
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
 
 export default function Index({ data }) {
   const [image, setImage] = useState("/img/default.jpg");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [loadingImage, setLoadingImage] = useState(false);
 
   function showImage(imgUrl) {
     setImage(imgUrl);
     onOpen();
+    setLoadingImage(true);
+
+    setTimeout(() => {
+      setLoadingImage(false);
+    }, 500);
   }
 
   return (
     <>
       <Layout>
-        <Box pt={6} textAlign='center' fontSize='2xl' fontWeight='bold'>
+        <Totales data={data} />
+        <Box pt={7} textAlign='center' fontSize='2xl' fontWeight='bold'>
           Tabla Chifles
         </Box>
-        <Box m={6} p={2} border='1px solid #4A5568' borderRadius='8px'>
+        <Box
+          mt={6}
+          p={2}
+          border='1px solid #4A5568'
+          borderRadius='8px'
+          maxW='1250px'
+          mx={{ base: 6, md: "auto" }}
+        >
           <TableContainer>
             <Table size='md' variant='simple'>
               <Thead>
@@ -92,9 +107,25 @@ export default function Index({ data }) {
                       textOverflow='ellipsis'
                       overflow='hidden'
                     >
-                      {operacion.properties.Descripcion.rich_text[0].plain_text}
+                      <Tooltip
+                        borderRadius='8px'
+                        py={2}
+                        px={3}
+                        label={
+                          operacion.properties.Descripcion.rich_text[0]
+                            .plain_text
+                        }
+                        placement='bottom-start'
+                      >
+                        {
+                          operacion.properties.Descripcion.rich_text[0]
+                            .plain_text
+                        }
+                      </Tooltip>
                     </Td>
-                    <Td>{operacion.properties.Creacion.created_time}</Td>
+                    <Td>
+                      {operacion.properties.Creacion.created_time.slice(0, 10)}
+                    </Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -112,13 +143,27 @@ export default function Index({ data }) {
             </Table>
           </TableContainer>
         </Box>
-        <Totales data={data} />
+
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
-          <ModalContent bg='#171923' w='90%'>
+          <ModalContent bg='#171923' w='90%' maxH='85vh' overflow='auto'>
             <ModalCloseButton />
-            <ModalBody mt={8} mb={4} mx={2}>
-              <Image w='auto' h='100%' src={image} alt='' borderRadius='8px' />
+            <ModalBody
+              mt={8}
+              mb={4}
+              mx={1}
+              display='flex'
+              justifyContent='center'
+            >
+              {loadingImage ? <Spinner size='lg' /> : ""}
+              <Image
+                display={!loadingImage ? "block" : "none"}
+                w='100%'
+                h='auto'
+                src={image}
+                alt=''
+                borderRadius='8px'
+              />
             </ModalBody>
           </ModalContent>
         </Modal>
