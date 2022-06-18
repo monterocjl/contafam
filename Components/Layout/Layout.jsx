@@ -46,9 +46,8 @@ export default function Layout({ children }) {
                 as={Button}
                 variant='outline'
                 colorScheme='blue'
-                _focus='none'
-                _hover='none'
-                _expanded='none'
+                _focus={[]}
+                _hover={[]}
               >
                 Ir a tabla
               </MenuButton>
@@ -73,9 +72,8 @@ export default function Layout({ children }) {
               <MenuButton
                 as={Button}
                 colorScheme='blue'
-                _focus='none'
-                _hover='none'
-                _expanded='none'
+                _focus={[]}
+                _hover={[]}
               >
                 Producto
               </MenuButton>

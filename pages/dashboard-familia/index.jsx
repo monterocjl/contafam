@@ -22,8 +22,8 @@ import {
 import { BsImage } from "react-icons/bs";
 
 import Layout from "../../Components/Layout/Layout";
-
-export default function Index({ operaciones }) {
+import Totales from "../../Components/Totales/Totales";
+export default function Index({ data }) {
   const [image, setImage] = useState("/img/default.jpg");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -35,6 +35,9 @@ export default function Index({ operaciones }) {
   return (
     <>
       <Layout>
+        <Box pt={6} textAlign='center' fontSize='2xl' fontWeight='bold'>
+          Tabla Familia
+        </Box>
         <Box m={6} p={2} border='1px solid #4A5568' borderRadius='8px'>
           <TableContainer>
             <Table size='md' variant='simple'>
@@ -50,7 +53,7 @@ export default function Index({ operaciones }) {
                 </Tr>
               </Thead>
               <Tbody color='#CBD5E0'>
-                {operaciones.map((operacion) => (
+                {data.map((operacion) => (
                   <Tr key={operacion.id}>
                     <Td>{operacion.properties.Usuario.title[0].plain_text}</Td>
                     <Td isNumeric fontWeight='bold'>
@@ -108,6 +111,7 @@ export default function Index({ operaciones }) {
             </Table>
           </TableContainer>
         </Box>
+        <Totales data={data} />
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
           <ModalContent bg='#171923' w='90%'>
@@ -136,11 +140,11 @@ export async function getStaticProps() {
     ],
   });
 
-  const operaciones = response.results;
+  const data = response.results;
 
   return {
     props: {
-      operaciones,
+      data,
     },
   };
 }
