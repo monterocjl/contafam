@@ -115,10 +115,10 @@ export default function Index({ data }) {
         <Totales data={data} />
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
-          <ModalContent bg='#171923'>
+          <ModalContent bg='#171923' w='90%'>
             <ModalCloseButton />
             <ModalBody mt={8} mb={4} mx={2}>
-              <Image w='auto' h='80vh' src={image} alt='' borderRadius='8px' />
+              <Image w='auto' h='100%' src={image} alt='' borderRadius='8px' />
             </ModalBody>
           </ModalContent>
         </Modal>
