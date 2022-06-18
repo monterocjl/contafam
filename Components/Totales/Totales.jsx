@@ -3,7 +3,6 @@ import { Box, Button } from "@chakra-ui/react";
 
 export default function Totales({ data }) {
   const [total, setTotal] = useState(0);
-  console.log(data);
 
   function getTotales() {
     const newArray = [];
