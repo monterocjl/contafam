@@ -33,7 +33,7 @@ export default function Index({ data }) {
     "Jun 18 1999 GMT-0500"
   );
   const [fechaFiltroFinal, setFechaFiltroFinal] = useState(
-    "Jun 18 2022 23:59:59 GMT-0500"
+    "Jun 18 2055 23:59:59 GMT-0500"
   );
   const [dataFiltrada, setDataFiltrada] = useState("");
 
