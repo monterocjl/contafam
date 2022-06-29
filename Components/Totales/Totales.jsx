@@ -22,7 +22,10 @@ export default function Totales({ data }) {
           setTotalGastos(sumaTotal);
         }
         //TOTAL INGRESOS
-        else if (e.properties.Operacion.select.name === "Ingreso") {
+        if (
+          e.properties.Operacion.select.name === "Ingreso" ||
+          e.properties.Usuario.title[0].plain_text === "Juanito"
+        ) {
           arrayIngresos.push(e.properties.Importe.number);
           const sumaTotal = 0;
           for (let i = 0; i < arrayIngresos.length; i++) {
