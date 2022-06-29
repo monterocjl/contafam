@@ -6,7 +6,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  ChevronDownIcon,
   Button,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -52,16 +51,16 @@ export default function Layout({ children }) {
                 Ir a tabla
               </MenuButton>
               <MenuList bg='gray.900' borderColor='gray.700'>
-                <MenuItem _focus={{ bg: "gray.700" }}>
+                <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/dashboard-familia' w='100%'>
-                    <Box w='100%'>
+                    <Box w='100%' p='5px 10px'>
                       <a>Tabla Familia</a>
                     </Box>
                   </Link>
                 </MenuItem>
-                <MenuItem _focus={{ bg: "gray.700" }}>
+                <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/dashboard-chifles' w='100%'>
-                    <Box w='100%'>
+                    <Box w='100%' p='5px 10px'>
                       <a>Tabla Chifles</a>
                     </Box>
                   </Link>
@@ -78,16 +77,16 @@ export default function Layout({ children }) {
                 Nueva operación
               </MenuButton>
               <MenuList bg='gray.900' borderColor='gray.700'>
-                <MenuItem _focus={{ bg: "gray.700" }}>
+                <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/product/familia' w='100%'>
-                    <Box w='100%'>
+                    <Box w='100%' p='5px 10px'>
                       <a>Familia</a>
                     </Box>
                   </Link>
                 </MenuItem>
-                <MenuItem _focus={{ bg: "gray.700" }}>
+                <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/product/chifles' w='100%'>
-                    <Box w='100%'>
+                    <Box w='100%' p='5px 10px'>
                       <a>Chifles</a>
                     </Box>
                   </Link>

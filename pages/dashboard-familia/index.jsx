@@ -20,7 +20,7 @@ import {
   useDisclosure,
   Spinner,
   Tooltip,
-  Button,
+  Tag,
 } from "@chakra-ui/react";
 import { BsImage } from "react-icons/bs";
 import Layout from "../../Components/Layout/Layout";
@@ -68,9 +68,10 @@ export default function Index({ data }) {
           borderRadius='8px'
           maxW='1250px'
           mx={{ base: 6, md: "auto" }}
+          mb='40px'
         >
           <TableContainer>
-            <Table size='md' variant='simple'>
+            <Table size='md' variant='simple' fontWeight='bold'>
               <Thead>
                 <Tr>
                   <Th>Usuario</Th>
@@ -99,7 +100,17 @@ export default function Index({ data }) {
                         S/. {operacion.properties.Importe.number}
                       </Td>
                       <Td textAlign='center'>
-                        {operacion.properties.Operacion.select.name}
+                        <Tag
+                          colorScheme={`${
+                            operacion.properties.Operacion.select.name ==
+                            "Ingreso"
+                              ? "teal"
+                              : "red"
+                          }`}
+                          variant='solid'
+                        >
+                          {operacion.properties.Operacion.select.name}
+                        </Tag>
                       </Td>
                       <Td textAlign='center'>
                         {operacion.properties.Categoria.select.name}
@@ -150,7 +161,7 @@ export default function Index({ data }) {
                       <Td>
                         {`${format(
                           new Date(
-                            operacion.properties.Fecha_operacion.date.start
+                            `${operacion.properties.Fecha_operacion.date.start} GMT-0500`
                           ),
                           "dd MMM yyyy"
                         )}`}

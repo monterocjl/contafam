@@ -20,10 +20,12 @@ import {
   useDisclosure,
   Spinner,
   Tooltip,
+  Tag,
 } from "@chakra-ui/react";
 import { BsImage } from "react-icons/bs";
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
+import { format } from "date-fns";
 
 export default function Index({ data }) {
   const [image, setImage] = useState("/img/default.jpg");
@@ -54,9 +56,10 @@ export default function Index({ data }) {
           borderRadius='8px'
           maxW='1250px'
           mx={{ base: 6, md: "auto" }}
+          mb='40px'
         >
           <TableContainer>
-            <Table size='md' variant='simple'>
+            <Table size='md' variant='simple' fontWeight='bold'>
               <Thead>
                 <Tr>
                   <Th>Usuario</Th>
@@ -76,7 +79,17 @@ export default function Index({ data }) {
                       S/. {operacion.properties.Importe.number}
                     </Td>
                     <Td textAlign='center'>
-                      {operacion.properties.Operacion.select.name}
+                      <Tag
+                        colorScheme={`${
+                          operacion.properties.Operacion.select.name ==
+                          "Ingreso"
+                            ? "teal"
+                            : "red"
+                        }`}
+                        variant='solid'
+                      >
+                        {operacion.properties.Operacion.select.name}
+                      </Tag>
                     </Td>
                     <Td textAlign='center'>
                       {operacion.properties.Categoria.select.name}
@@ -124,7 +137,12 @@ export default function Index({ data }) {
                       </Tooltip>
                     </Td>
                     <Td>
-                      {operacion.properties.Creacion.created_time.slice(0, 10)}
+                      {`${format(
+                        new Date(
+                          `${operacion.properties.Fecha_operacion.date.start} GMT-0500`
+                        ),
+                        "dd MMM yyyy"
+                      )}`}
                     </Td>
                   </Tr>
                 ))}
@@ -180,8 +198,8 @@ export async function getServerSideProps() {
     database_id: databaseId,
     sorts: [
       {
-        property: "Creacion",
-        direction: "ascending",
+        property: "Fecha_operacion",
+        direction: "descending",
       },
     ],
   });
