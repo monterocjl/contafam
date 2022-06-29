@@ -63,6 +63,13 @@ export default async function handler(req, res) {
             },
           ],
         },
+        Fecha_operacion: {
+          date: {
+            start: body.fecha_creacion
+              ? body.fecha_creacion
+              : body.fecha_creacion,
+          },
+        },
       },
     };
 

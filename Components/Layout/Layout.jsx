@@ -38,7 +38,7 @@ export default function Layout({ children }) {
             display='flex'
             alignItems='center'
             justifyContent='space-between'
-            gap={5}
+            gap={3}
             fontWeight='bold'
           >
             <Menu>
@@ -75,7 +75,7 @@ export default function Layout({ children }) {
                 _focus={[]}
                 _hover={[]}
               >
-                Producto
+                Nueva operación
               </MenuButton>
               <MenuList bg='gray.900' borderColor='gray.700'>
                 <MenuItem _focus={{ bg: "gray.700" }}>

@@ -19,6 +19,7 @@ export default function AddImagePrev({
           borderRadius='6px'
           fontWeight='bold'
           h='fit-content'
+          cursor='pointer'
         >
           Subir archivo
           <Input

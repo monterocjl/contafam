@@ -9,6 +9,9 @@ import { successToast, errorToast } from "../../utils/toasts";
 import addToDataBase from "../../api/addToDataBase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function IngresoFamilia({ tipoOperacion }) {
   const toast = useToast();
@@ -19,6 +22,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
   const [file, setFile] = useState(null);
   const [previewImg, setPreviewImg] = useState("/img/default.jpg");
   const [loading, setLoading] = useState(false);
+  const [fechaOperacion, setFechaOperacion] = useState(new Date());
 
   useEffect(() => {
     if (file?.name) {
@@ -51,6 +55,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
         operacion: tipoOperacion,
         usuario: usuario,
         adjunto: data?.secure_url ? data?.secure_url : "",
+        fecha_creacion: format(fechaOperacion, "yyyy-MM-dd"),
       };
 
       const response = await addToDataBase(completeData, "fam");
@@ -63,6 +68,7 @@ export default function IngresoFamilia({ tipoOperacion }) {
         descripcion.current.value = "";
         adjunto.current.value = "";
         setFile(null);
+        setFechaOperacion(new Date());
 
         setLoading(false);
       } else {
@@ -87,6 +93,19 @@ export default function IngresoFamilia({ tipoOperacion }) {
             reference={importe}
             onChange={formik.handleChange}
           />
+          <Box display='flex' alignItems='center' gap='12px'>
+            <Button bg='#2D3748' _hover={[]} _active={[]} fontWeight='bold'>
+              Elegir fecha
+              <DatePicker
+                wrapperClassName='datePicker'
+                onChange={(date) => setFechaOperacion(date)}
+              />
+            </Button>
+            <Box fontWeight='bold'>{`${format(
+              fechaOperacion,
+              "dd MMM yyyy"
+            )}`}</Box>
+          </Box>
           <Description
             error={formik.errors.descripcion}
             reference={descripcion}

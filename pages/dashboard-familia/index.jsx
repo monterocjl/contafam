@@ -25,6 +25,8 @@ import {
 import { BsImage } from "react-icons/bs";
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
+import { format } from "date-fns";
+
 export default function Index({ data }) {
   const [image, setImage] = useState("/img/default.jpg");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -146,9 +148,12 @@ export default function Index({ data }) {
                         </Tooltip>
                       </Td>
                       <Td>
-                        {`${new Date(
-                          operacion.properties.Creacion.created_time
-                        )}`.slice(4, 10)}
+                        {`${format(
+                          new Date(
+                            operacion.properties.Fecha_operacion.date.start
+                          ),
+                          "dd MMM yyyy"
+                        )}`}
                       </Td>
                     </Tr>
                   ) : (
@@ -210,8 +215,8 @@ export async function getServerSideProps() {
     database_id: databaseId,
     sorts: [
       {
-        property: "Creacion",
-        direction: "ascending",
+        property: "Fecha_operacion",
+        direction: "descending",
       },
     ],
   });
