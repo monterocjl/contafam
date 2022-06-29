@@ -18,8 +18,7 @@ a {
 .datePicker {
   background: black;
   height: 100%;
-  position: absolute;
-  
+  position: absolute;  
   opacity: 0;
 }
 

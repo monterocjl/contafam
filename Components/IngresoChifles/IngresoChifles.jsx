@@ -99,6 +99,7 @@ export default function IngresoChifles({ tipoOperacion }) {
               <DatePicker
                 wrapperClassName='datePicker'
                 onChange={(date) => setFechaOperacion(date)}
+                disabledKeyboardNavigation
               />
             </Button>
             <Box fontWeight='bold'>{`${format(
