@@ -48,20 +48,20 @@ export default function Layout({ children }) {
                 _focus={[]}
                 _hover={[]}
               >
-                Ir a tabla
+                Consolidado
               </MenuButton>
               <MenuList bg='gray.900' borderColor='gray.700'>
                 <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/dashboard-familia' w='100%'>
-                    <Box w='100%' p='5px 10px'>
-                      <a>Tabla Familia</a>
+                    <Box fontWeight='bold' w='100%' p='5px 10px'>
+                      <a>Consolidado Familia</a>
                     </Box>
                   </Link>
                 </MenuItem>
                 <MenuItem _focus={{ bg: "gray.700" }} p='0'>
                   <Link href='/dashboard-chifles' w='100%'>
-                    <Box w='100%' p='5px 10px'>
-                      <a>Tabla Chifles</a>
+                    <Box fontWeight='bold' w='100%' p='5px 10px'>
+                      <a>Consolidado Chifles</a>
                     </Box>
                   </Link>
                 </MenuItem>

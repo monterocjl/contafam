@@ -10,49 +10,18 @@ import {
   Td,
   TableContainer,
   Box,
-  Image,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
-  Spinner,
   Tooltip,
   Tag,
 } from "@chakra-ui/react";
-import { BsImage } from "react-icons/bs";
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
 import { format } from "date-fns";
+import ModalImagenAdjunta from "../../Components/ModalImagenAdjunta/ModalImagenAdjunta";
+import ModalDescripcion from "../../Components/ModalDescripcion/ModalDescripcion";
 
 export default function Index({ data }) {
-  const [image, setImage] = useState("/img/default.jpg");
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [loadingImage, setLoadingImage] = useState(false);
-  const [fechaFiltroInicial, setFechaFiltroInicial] = useState(
-    "Jun 18 1999 GMT-0500"
-  );
-  const [fechaFiltroFinal, setFechaFiltroFinal] = useState(
-    "Jun 18 2055 23:59:59 GMT-0500"
-  );
   const [dataFiltrada, setDataFiltrada] = useState("");
-
-  function showImage(imgUrl) {
-    setImage(imgUrl);
-    onOpen();
-    setLoadingImage(true);
-
-    setTimeout(() => {
-      setLoadingImage(false);
-    }, 500);
-  }
-
-  function filtrarPorMes(month, year) {
-    setFechaFiltroInicial(`${month} 01 ${year} 00:00:00 GMT-0500`);
-    setFechaFiltroFinal(`${month + 1} 01 ${year} 00:00:00 GMT-0500`);
-  }
 
   return (
     <>
@@ -74,113 +43,86 @@ export default function Index({ data }) {
             <Table size='md' variant='simple' fontWeight='bold'>
               <Thead>
                 <Tr>
-                  <Th>Usuario</Th>
-                  <Th isNumeric>Importe</Th>
-                  <Th textAlign='center'>Operación</Th>
+                  <Th>Fecha</Th>
                   <Th textAlign='center'>Categoría</Th>
+                  <Th textAlign='center'>Importe</Th>
+                  <Th textAlign='center'>Operación</Th>
                   <Th textAlign='center'>Adjunto</Th>
                   <Th>Descripción</Th>
-                  <Th>Fecha</Th>
+                  <Th>Usuario</Th>
                 </Tr>
               </Thead>
               <Tbody color='#CBD5E0'>
-                {/* {data.map((operacion) =>
-                  1 < 2 ? <Tr key={operacion.id}></Tr> : ""
-                )} */}
-                {data.map((operacion) =>
-                  new Date(operacion.properties.Creacion.created_time) >=
-                    new Date(fechaFiltroInicial) &&
-                  new Date(operacion.properties.Creacion.created_time) <=
-                    new Date(fechaFiltroFinal) ? (
-                    <Tr key={operacion.id}>
-                      <Td>
-                        {operacion.properties.Usuario.title[0].plain_text}
-                      </Td>
-                      <Td isNumeric fontWeight='bold'>
-                        S/. {operacion.properties.Importe.number}
-                      </Td>
-                      <Td textAlign='center'>
-                        <Tag
-                          colorScheme={`${
-                            operacion.properties.Operacion.select.name ==
-                            "Ingreso"
-                              ? "teal"
-                              : "red"
-                          }`}
-                          variant='solid'
-                        >
-                          {operacion.properties.Operacion.select.name}
-                        </Tag>
-                      </Td>
-                      <Td textAlign='center'>
-                        {operacion.properties.Categoria.select.name}
-                      </Td>
+                {data.map((operacion) => (
+                  <Tr key={operacion.id}>
+                    <Td>
+                      {`${format(
+                        new Date(
+                          `${operacion.properties.Fecha_operacion.date.start} GMT-0500`
+                        ),
+                        "dd MMM yyyy"
+                      )}`}
+                    </Td>
+                    <Td textAlign='center'>
+                      {operacion.properties.Categoria.select.name}
+                    </Td>
+                    <Td fontWeight='bold' textAlign='center'>
+                      S/. {operacion.properties.Importe.number}
+                    </Td>
 
-                      <Td textAlign='center'>
-                        {operacion.properties.Adjunto.rich_text[0]
-                          ?.plain_text ? (
-                          <IconButton
-                            onClick={() =>
-                              showImage(
-                                operacion.properties.Adjunto.rich_text[0]
-                                  ?.plain_text
-                              )
-                            }
-                            variant='outline'
-                            colorScheme='teal'
-                            aria-label='Call Sage'
-                            fontSize='20px'
-                            icon={<BsImage />}
-                          />
-                        ) : (
-                          "-"
-                        )}
-                      </Td>
-                      <Td
-                        maxW='150px'
-                        whiteSpace='nowrap'
-                        textOverflow='ellipsis'
-                        overflow='hidden'
+                    <Td textAlign='center'>
+                      <Tag
+                        colorScheme={`${
+                          operacion.properties.Operacion.select.name ==
+                          "Ingreso"
+                            ? "teal"
+                            : "red"
+                        }`}
+                        variant='solid'
                       >
-                        <Tooltip
-                          borderRadius='8px'
-                          py={2}
-                          px={3}
-                          label={
+                        {operacion.properties.Operacion.select.name}
+                      </Tag>
+                    </Td>
+
+                    <Td textAlign='center'>
+                      {operacion.properties.Adjunto.rich_text[0]?.plain_text ? (
+                        <ModalImagenAdjunta
+                          imagen={
+                            operacion.properties.Adjunto.rich_text[0]
+                              ?.plain_text
+                          }
+                        />
+                      ) : (
+                        "-"
+                      )}
+                    </Td>
+
+                    <Td maxW='150px' textAlign='center'>
+                      {operacion.properties.Descripcion.rich_text[0]
+                        .plain_text == "-" ? (
+                        "-"
+                      ) : (
+                        <ModalDescripcion
+                          descripcion={
                             operacion.properties.Descripcion.rich_text[0]
                               .plain_text
                           }
-                          placement='bottom-start'
-                        >
-                          {
-                            operacion.properties.Descripcion.rich_text[0]
-                              .plain_text
-                          }
-                        </Tooltip>
-                      </Td>
-                      <Td>
-                        {`${format(
-                          new Date(
-                            `${operacion.properties.Fecha_operacion.date.start} GMT-0500`
-                          ),
-                          "dd MMM yyyy"
-                        )}`}
-                      </Td>
-                    </Tr>
-                  ) : (
-                    ""
-                  )
-                )}
+                        />
+                      )}
+                    </Td>
+                    <Td>{operacion.properties.Usuario.title[0].plain_text}</Td>
+                  </Tr>
+                ))}
               </Tbody>
               <Tfoot>
                 <Tr>
-                  <Th>Usuario</Th>
+                  <Th>Fecha</Th>
+                  <Th textAlign='center'>Categoría</Th>
                   <Th isNumeric>Importe</Th>
                   <Th textAlign='center'>Operación</Th>
-                  <Th textAlign='center'>Categoría</Th>
                   <Th textAlign='center'>Adjunto</Th>
                   <Th>Descripción</Th>
-                  <Th>Fecha</Th>
+                  <Th>Usuario</Th>
                 </Tr>
               </Tfoot>
             </Table>
@@ -189,30 +131,6 @@ export default function Index({ data }) {
             Junio
           </Button> */}
         </Box>
-
-        <Modal onClose={onClose} isOpen={isOpen} isCentered>
-          <ModalOverlay />
-          <ModalContent bg='#171923' w='90%' maxH='85vh' overflow='auto'>
-            <ModalCloseButton />
-            <ModalBody
-              mt={8}
-              mb={4}
-              mx={1}
-              display='flex'
-              justifyContent='center'
-            >
-              {loadingImage ? <Spinner size='lg' /> : ""}
-              <Image
-                display={!loadingImage ? "block" : "none"}
-                w='100%'
-                h='auto'
-                src={image}
-                alt=''
-                borderRadius='8px'
-              />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
       </Layout>
     </>
   );

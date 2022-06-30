@@ -141,7 +141,7 @@ function initialValues() {
   return {
     importe: 0,
     categoria: "",
-    descripcion: "",
+    descripcion: "-",
   };
 }
 
