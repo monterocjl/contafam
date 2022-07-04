@@ -156,6 +156,7 @@ function validationSchema() {
 
 const categoriasGastoFamilia = [
   "Bodega",
+  "Casa",
   "Farmacia",
   "Carro",
   "Salud",
