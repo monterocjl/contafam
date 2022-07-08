@@ -13,7 +13,13 @@ import {
   useDisclosure,
   Tooltip,
   Tag,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+import { BiFilterAlt } from "react-icons/bi";
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
 import { format } from "date-fns";
@@ -21,14 +27,79 @@ import ModalImagenAdjunta from "../../Components/ModalImagenAdjunta/ModalImagenA
 import ModalDescripcion from "../../Components/ModalDescripcion/ModalDescripcion";
 
 export default function Index({ data }) {
-  const [dataFiltrada, setDataFiltrada] = useState("");
+  const [dataFiltrada, setDataFiltrada] = useState(data);
+  const [month, setMonth] = useState("");
+
+  function filtrarPorMes(fromDate, toDate, monthFilter) {
+    const newArray = [];
+    data.map((elemento) => {
+      if (
+        elemento.properties.Fecha_operacion.date.start >= fromDate &&
+        elemento.properties.Fecha_operacion.date.start <= toDate
+      )
+        newArray.push(elemento);
+    });
+
+    setDataFiltrada(newArray);
+    setMonth(monthFilter);
+  }
 
   return (
     <>
       <Layout>
-        <Totales data={dataFiltrada === "" ? data : dataFiltrada} />
-        <Box pt={7} textAlign='center' fontSize='2xl' fontWeight='bold'>
-          Tabla Familia
+        <Totales data={dataFiltrada} />
+        <Box
+          pt={7}
+          textAlign='center'
+          fontSize={{ base: "xl", md: "3xl" }}
+          fontWeight='bold'
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          maxW='1250px'
+          mx={{ base: 6, md: "auto" }}
+        >
+          <Box>Tabla Familia</Box>
+          <Box display='flex' gap={2} alignItems='center'>
+            <Box display='flex' alignItems='center' gap={1} fontSize='md'>
+              <Box fontStyle='italic'>{month == "" ? "" : "Filtrado por:"}</Box>
+              <Box>{month}</Box>
+            </Box>
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label='Options'
+                icon={<BiFilterAlt />}
+                variant='outline'
+                _hover={[]}
+                _focus={[]}
+              />
+              <MenuList bg='gray.900' borderColor='gray.700'>
+                <MenuItem
+                  _focus={{ bg: "gray.700" }}
+                  p='0'
+                  onClick={() =>
+                    filtrarPorMes("2022-07-01", "2022-07-31", "Julio")
+                  }
+                >
+                  <Box fontSize='lg' w='100%' p='5px 10px'>
+                    Julio 2022
+                  </Box>
+                </MenuItem>
+                <MenuItem
+                  _focus={{ bg: "gray.700" }}
+                  p='0'
+                  onClick={() =>
+                    filtrarPorMes("2022-06-01", "2022-06-30", "Junio")
+                  }
+                >
+                  <Box fontSize='lg' w='100%' p='5px 10px'>
+                    Junio 2022
+                  </Box>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Box>
         </Box>
         <Box
           mt={6}
@@ -53,7 +124,7 @@ export default function Index({ data }) {
                 </Tr>
               </Thead>
               <Tbody color='#CBD5E0'>
-                {data.map((operacion) => (
+                {dataFiltrada.map((operacion) => (
                   <Tr key={operacion.id}>
                     <Td>
                       {`${format(
