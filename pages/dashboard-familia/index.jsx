@@ -63,6 +63,7 @@ export default function Index({ data }) {
           justifyContent={{ base: "center", md: "flex-start" }}
           w='100%'
           boxShadow={{ base: "0px 0px 13px -4px rgb(0 0 0 / 50%)", md: "none" }}
+          zIndex='10'
         >
           <Menu>
             <MenuButton
@@ -120,6 +121,7 @@ export default function Index({ data }) {
           justifyContent='space-between'
           maxW='1250px'
           mx={{ base: 6, md: "auto" }}
+          mb={showTable ? "0px" : "95px"}
         >
           <Box
             display='flex'
