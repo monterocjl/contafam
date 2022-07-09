@@ -20,6 +20,7 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import { BiFilterAlt } from "react-icons/bi";
+import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import Layout from "../../Components/Layout/Layout";
 import Totales from "../../Components/Totales/Totales";
 import { format } from "date-fns";
@@ -29,6 +30,7 @@ import ModalDescripcion from "../../Components/ModalDescripcion/ModalDescripcion
 export default function Index({ data }) {
   const [dataFiltrada, setDataFiltrada] = useState(data);
   const [month, setMonth] = useState("");
+  const [showTable, setShowTable] = useState(false);
 
   function filtrarPorMes(fromDate, toDate, monthFilter) {
     const newArray = [];
@@ -47,11 +49,71 @@ export default function Index({ data }) {
   return (
     <>
       <Layout>
+        <Box
+          mt={5}
+          mx={{ base: 0, md: "auto" }}
+          display='flex'
+          gap={2}
+          alignItems='center'
+          maxW='1250px'
+          h='70px'
+          bg={{ base: "#242b38", md: "none" }}
+          position={{ base: "fixed", md: "relative" }}
+          bottom='0'
+          justifyContent={{ base: "center", md: "flex-start" }}
+          w='100%'
+          boxShadow={{ base: "0px 0px 13px -4px rgb(0 0 0 / 50%)", md: "none" }}
+        >
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label='Options'
+              icon={<BiFilterAlt />}
+              variant='outline'
+              _hover={[]}
+              _focus={[]}
+            />
+            <MenuList bg='gray.900' borderColor='gray.700'>
+              <MenuItem
+                _focus={{ bg: "gray.700" }}
+                p='0'
+                onClick={() =>
+                  filtrarPorMes("2022-07-01", "2022-07-31", "Julio")
+                }
+              >
+                <Box fontSize='lg' w='100%' p='5px 10px'>
+                  Julio 2022
+                </Box>
+              </MenuItem>
+              <MenuItem
+                _focus={{ bg: "gray.700" }}
+                p='0'
+                onClick={() =>
+                  filtrarPorMes("2022-06-01", "2022-06-30", "Junio")
+                }
+              >
+                <Box fontSize='lg' w='100%' p='5px 10px'>
+                  Junio 2022
+                </Box>
+              </MenuItem>
+            </MenuList>
+          </Menu>
+          <Box
+            display='flex'
+            alignItems='center'
+            gap={2}
+            fontSize='lg'
+            fontWeight='bold'
+          >
+            <Box fontStyle='italic'>{month == "" ? "" : "Filtro:"}</Box>
+            <Box>{month}</Box>
+          </Box>
+        </Box>
         <Totales data={dataFiltrada} />
         <Box
-          pt={7}
+          pt={12}
           textAlign='center'
-          fontSize={{ base: "xl", md: "3xl" }}
+          fontSize={{ base: "xl", md: "2xl" }}
           fontWeight='bold'
           display='flex'
           alignItems='center'
@@ -59,56 +121,34 @@ export default function Index({ data }) {
           maxW='1250px'
           mx={{ base: 6, md: "auto" }}
         >
-          <Box>Tabla Familia</Box>
-          <Box display='flex' gap={2} alignItems='center'>
-            <Box display='flex' alignItems='center' gap={1} fontSize='md'>
-              <Box fontStyle='italic'>{month == "" ? "" : "Filtrado por:"}</Box>
-              <Box>{month}</Box>
-            </Box>
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                aria-label='Options'
-                icon={<BiFilterAlt />}
-                variant='outline'
-                _hover={[]}
-                _focus={[]}
-              />
-              <MenuList bg='gray.900' borderColor='gray.700'>
-                <MenuItem
-                  _focus={{ bg: "gray.700" }}
-                  p='0'
-                  onClick={() =>
-                    filtrarPorMes("2022-07-01", "2022-07-31", "Julio")
-                  }
-                >
-                  <Box fontSize='lg' w='100%' p='5px 10px'>
-                    Julio 2022
-                  </Box>
-                </MenuItem>
-                <MenuItem
-                  _focus={{ bg: "gray.700" }}
-                  p='0'
-                  onClick={() =>
-                    filtrarPorMes("2022-06-01", "2022-06-30", "Junio")
-                  }
-                >
-                  <Box fontSize='lg' w='100%' p='5px 10px'>
-                    Junio 2022
-                  </Box>
-                </MenuItem>
-              </MenuList>
-            </Menu>
+          <Box
+            display='flex'
+            alignItems='center'
+            gap={3}
+            justifyContent='space-between'
+            w='100%'
+          >
+            <Box>Tabla Familia</Box>
+            <IconButton
+              aria-label='Filtrar'
+              icon={showTable ? <AiFillEye /> : <AiFillEyeInvisible />}
+              variant='outline'
+              _hover={[]}
+              _focus={[]}
+              onClick={() => setShowTable((prev) => !prev)}
+              fontSize='lg'
+            />
           </Box>
         </Box>
         <Box
+          display={showTable ? "block" : "none"}
           mt={6}
           p={2}
           border='1px solid #4A5568'
           borderRadius='8px'
           maxW='1250px'
           mx={{ base: 6, md: "auto" }}
-          mb='40px'
+          mb='90px'
         >
           <TableContainer>
             <Table size='md' variant='simple' fontWeight='bold'>
