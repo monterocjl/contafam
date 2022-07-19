@@ -87,7 +87,7 @@ export default function CardTotalByUser({ user, data }) {
         <Box fontWeight='bold' display='flex' alignItems='center' gap={1}>
           <Box>Aporte:</Box>
           <Box fontSize='lg' color='green.500'>
-            S/. {aporte}
+            S/. {aporte.toFixed(2)}
           </Box>
         </Box>
       </Box>
