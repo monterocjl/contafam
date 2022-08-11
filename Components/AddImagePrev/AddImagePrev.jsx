@@ -28,7 +28,7 @@ export default function AddImagePrev({
             name='adjunto'
             type='file'
             onChange={(event) => {
-              console.log(event.target.files[0]);
+              setFile(event.target.files[0]);
             }}
             display='none'
           />

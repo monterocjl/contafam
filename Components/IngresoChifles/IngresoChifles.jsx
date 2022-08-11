@@ -25,6 +25,7 @@ export default function IngresoChifles({ tipoOperacion }) {
   const [fechaOperacion, setFechaOperacion] = useState(new Date());
 
   useEffect(() => {
+    console.log(file);
     if (file?.name) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
