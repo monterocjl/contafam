@@ -79,6 +79,17 @@ export default function Index({ data }) {
                 _focus={{ bg: "gray.700" }}
                 p='0'
                 onClick={() =>
+                  filtrarPorMes("2022-08-01", "2022-08-31", "Agosto")
+                }
+              >
+                <Box fontSize='lg' w='100%' p='5px 10px'>
+                  Agosto 2022
+                </Box>
+              </MenuItem>
+              <MenuItem
+                _focus={{ bg: "gray.700" }}
+                p='0'
+                onClick={() =>
                   filtrarPorMes("2022-07-01", "2022-07-31", "Julio")
                 }
               >
