@@ -5,8 +5,6 @@ export default function CardTotalByUser({ user, data }) {
   const [avatar, setAvatar] = useState("");
   const [aporte, setAporte] = useState(0);
 
-  console.log(aporte);
-
   useEffect(() => {
     const arrayAporte = [];
     if (user == "Juanito") {

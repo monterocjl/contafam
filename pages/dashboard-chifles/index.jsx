@@ -193,10 +193,10 @@ export default function Index({ data }) {
 export async function getServerSideProps() {
   const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-  var data;
+  let data;
 
   const databaseId = process.env.NOTION_CHIFLES_DATABASE_ID;
-  const response = await notion.databases.query({
+  let response = await notion.databases.query({
     database_id: databaseId,
     sorts: [
       {
@@ -208,8 +208,8 @@ export async function getServerSideProps() {
 
   data = response.results;
 
-  if (response.has_more) {
-    const responseMore100 = await notion.databases.query({
+  while (response.has_more) {
+    response = await notion.databases.query({
       database_id: databaseId,
       sorts: [
         {
@@ -220,7 +220,7 @@ export async function getServerSideProps() {
       start_cursor: response.next_cursor,
     });
 
-    data = [...data, ...responseMore100.results];
+    data = [...data, ...response.results];
   }
 
   return {
