@@ -30,7 +30,7 @@ import ModalDescripcion from "../../Components/ModalDescripcion/ModalDescripcion
 export default function Index({ data }) {
   const [dataFiltrada, setDataFiltrada] = useState(data);
   const [month, setMonth] = useState("");
-  const [showTable, setShowTable] = useState(false);
+  const [showTable, setShowTable] = useState(true);
 
   function filtrarPorMes(fromDate, toDate, monthFilter) {
     const newArray = [];
