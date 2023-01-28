@@ -193,6 +193,8 @@ export default function Index({ data }) {
 export async function getServerSideProps() {
   const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
+  var data;
+
   const databaseId = process.env.NOTION_CHIFLES_DATABASE_ID;
   const response = await notion.databases.query({
     database_id: databaseId,
@@ -204,7 +206,22 @@ export async function getServerSideProps() {
     ],
   });
 
-  const data = response.results;
+  data = response.results;
+
+  if (response.has_more) {
+    const responseMore100 = await notion.databases.query({
+      database_id: databaseId,
+      sorts: [
+        {
+          property: "Fecha_operacion",
+          direction: "descending",
+        },
+      ],
+      start_cursor: response.next_cursor,
+    });
+
+    data = [...data, ...responseMore100.results];
+  }
 
   return {
     props: {
